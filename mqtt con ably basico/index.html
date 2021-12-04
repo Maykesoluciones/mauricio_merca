@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!--  Libreria de Ably
+    <script lang="text/javascript" src="https://cdn.ably.io/lib/ably.min-1.js"></script>
+-->
+</head>
+<body>
+
+    <button id="boton" type="button" style="margin:2px; width: 90%;" onclick="enviar_msj_mqtt()">mqtt mensaje</button>
+  
+ 
+    
+
+
+
+<!-- mis conexiones mqtt y datos -->
+ <script src="../scripts/ably.min-1.js" type="text/javascript"></script>
+
+ <script>
+
+  // Authentication
+   url = "https://realtime.ably.io/event-stream?";
+   version = "1.2"
+   username = "VRDsGQ.B_CYIQ";
+   password = "dPUOfDfiuRQrRSX9wt1fcYc9v-AKBdGQa2jTP60_D5g";
+   topic_raiz = "ok";
+   topic_prueba = "/prueba";
+
+   var ably = new Ably.Realtime(username+':'+password);
+
+//recibir mensajes de los topicos suscritos
+
+var conexion = url+'channels='+topic_raiz+'&v='+version+'&key='+username+':'+password;
+var eventSource = new EventSource(conexion);
+eventSource.onmessage = function(event) {
+  var message = JSON.parse(event.data);
+
+  console.log('Topic: ' + message.channel + '  Mensaje: ' + message.data ); 
+
+// Decodificar mensaje
+//var decodedString = atob(message.data);
+//console.log('Topic: ' + message.channel + '  Mensaje: ' + decodedString ); 
+};
+
+//recibir mensajes de los topicos suscritos
+
+var conexion = url+'channels='+topic_raiz+topic_prueba+'&v='+version+'&key='+username+':'+password;
+var eventSource = new EventSource(conexion);
+eventSource.onmessage = function(event) {
+  var message = JSON.parse(event.data);
+
+  console.log('Topic: ' + message.channel + '  Mensaje: ' + message.data ); 
+
+// Decodificar mensaje
+//var decodedString = atob(message.data);
+//console.log('Topic: ' + message.channel + '  Mensaje: ' + decodedString ); 
+};
+
+function enviar_msj_mqtt(){
+var channel = ably.channels.get('ok/prueba');
+channel.publish('', 'Gracias Dios!');
+
+}
+
+    </script>
+    
+</body>
+</html>
