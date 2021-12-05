@@ -86,5 +86,3 @@ function sw1_change(){
     channel.publish('',"0");
    }
  }
-
-
