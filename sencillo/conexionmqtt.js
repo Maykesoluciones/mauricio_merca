@@ -73,7 +73,7 @@ if (topic_datos_lampras == topic_raiz + topic_datos_lamparas){
 
   ////////////////////////////////////////////////////////
 function sw1_change(){   
-  var channel = ably.channels.get(topic_raiz+'/actions/sw1')
+  var channel = ably.channels.get(topic_raiz+'/actions/sw1');
   var inputChecked_sw1;
   
   inputChecked_sw1 = document.getElementById("display_sw1").checked;
