@@ -33,7 +33,7 @@ console.log('Topic: ' + message.channel + '  Mensaje: ' + decodedString );
     }
   
 var channel = ably.channels.get(topic_raiz);
-channel.publish(clientId, 'Gracias Dios!');
+channel.publish(clientId, mensaje_inicial);
 
 };
 
