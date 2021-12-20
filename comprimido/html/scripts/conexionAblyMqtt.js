@@ -13,6 +13,9 @@
 
   var ably = new Ably.Realtime(username+':'+password);
 
+var channel = ably.channels.get(topic_raiz);
+channel.publish(clientId, mensaje_inicial);
+
   //recibir mensajes de los topicos suscritos
 
 var conexion = url+'channels='+topic_raiz+'&v='+version+'&key='+username+':'+password;
