@@ -18,19 +18,20 @@
 var conexion = url+'channels='+topic_raiz+'&v='+version+'&key='+username+':'+password;
 var eventSource = new EventSource(conexion);
 eventSource.onmessage = function(event) {
-  var message = JSON.parse(event.data);
+var message = JSON.parse(event.data);
 
   var topic = message.channel;
 // Decodificar mensaje
 var decodedString = atob(message.data);
 console.log('Topic: ' + message.channel + '  Mensaje: ' + decodedString ); 
+  
+    if (topic == topic_raiz){
+      var splitted = message.toString().split(",");
+      var conex = splitted[0];
 
-if (topic == topic_raiz){
-  var splitted = decodedString.toString().split(",");
-  var conexion = splitted[0];
-  document.getElementById("displayconexion").innerHTML = conexion;
-}
-
+      $("#display_conexion").html(conex);
+    }
+  
 var channel = ably.channels.get(topic_raiz);
 channel.publish(clientId, 'Gracias Dios!');
 
@@ -48,17 +49,15 @@ var decodedString = atob(message.data);
 console.log('Topic: ' + message.channel + '  Mensaje: ' + decodedString ); 
 
 if (topic_lamp == topic_raiz + topic_datos_lamparas){
-  var splitted = decodedString.toString().split(",");
-  var switch1 = splitted[0];
-  var inputChecked_L1;
-
+    var splitted = message.toString().split(",");
+    var switch1 = splitted[0];
+ 
     if(switch1 == "1"){
-      inputChecked_L1 = true;
-      document.getElementById("display_sw1").checked = inputChecked_L1;
+      $("#display_sw1").prop('checked', true);
     }else{
-      inputChecked_L1 = false;
-      document.getElementById("display_sw1").checked = inputChecked_L1;
+      $("#display_sw1").prop('checked',"");
     }
+  
 }
 };
 
@@ -67,14 +66,12 @@ if (topic_lamp == topic_raiz + topic_datos_lamparas){
   function sw1_change(){   
   var channel = ably.channels.get('ok/actions/sw1');
    var inputChecked_sw1;
-   
-   inputChecked_sw1 = document.getElementById("display_sw1").checked;
-   
-   if(inputChecked_sw1 == true){
+    
+   if ($('#display_sw1').is(":checked")){
      console.log("Mensaje sw1 1");
-     channel.publish('', 'Gracias Dios!');
+     channel.publish('', '1');
     } else{
      console.log("Mensaje sw1 0")
-     channel.publish('', 'ERES BUENO!');
-    }
+     channel.publish('', '0');
+    }    
   }
