@@ -18,6 +18,8 @@ channel.publish(clientId, mensaje_inicial);
 
   //recibir mensajes de los topicos suscritos
 
+// https://realtime.ably.io/event-stream?channels=ok&v=1.2&key=VRDsGQ.B_CYIQ:dPUOfDfiuRQrRSX9wt1fcYc9v-AKBdGQa2jTP60_D5g
+
 var conexion = url+'channels='+topic_raiz+'&v='+version+'&key='+username+':'+password;
 var eventSource = new EventSource(conexion);
 eventSource.onmessage = function(event) {
