@@ -30,6 +30,8 @@
         var timestamp = new Date(message.timestamp).toLocaleString();
         textAreaSubscriptions.value += '[' + timestamp + '] ' + message.data + '\n';
         
+        console.log(message.data.toString());
+        
     });
 </script>
 </html>
