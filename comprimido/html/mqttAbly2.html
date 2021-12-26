@@ -26,26 +26,17 @@
 
     var textAreaSubscriptions = document.getElementById('subscriptions');
     /* Subscribe to messages from an encrypted channel */
+    
     channelSub.subscribe(function (message) {
+        
+        var mensaje = JSON.parse(message.data);
+        
+        console.log('Topic: ' + mensaje.channel); 
+        
+        
         var timestamp = new Date(message.timestamp).toLocaleString();
         textAreaSubscriptions.value += '[' + timestamp + '] ' + message.data + '\n';     
-    });
-    
-var eventSource = new EventSource(realtime);
-eventSource.onmessage = function(event) {
-var message = JSON.parse(event.data);
-
-  var topic = message.channel;
-// Decodificar mensaje
-var decodedString = atob(message.data);
-console.log('Topic: ' + message.channel + '  Mensaje: ' + decodedString ); 
-  
-    if (topic == topic_raiz){
-      var splitted = message.toString().split(",");
-      var conex = splitted[0];
-
-      console.log('Topic: ' + conex);
-    }    
+    });  
     
     
 </script>
