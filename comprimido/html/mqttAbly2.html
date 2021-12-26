@@ -27,13 +27,7 @@
     var textAreaSubscriptions = document.getElementById('subscriptions');
     /* Subscribe to messages from an encrypted channel */
     
-    channelSub.subscribe(function (message) {
-        
-        var mensaje = JSON.parse(message.data);
-        
-        console.log('Topic: ' + mensaje.channel); 
-        
-        
+    channelSub.subscribe(function (message) {     
         var timestamp = new Date(message.timestamp).toLocaleString();
         textAreaSubscriptions.value += '[' + timestamp + '] ' + message.data + '\n';     
     });  
