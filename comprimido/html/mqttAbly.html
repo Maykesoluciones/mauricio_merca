@@ -19,17 +19,11 @@ var realtime = new Ably.Realtime("VRDsGQ.B_CYIQ:dPUOfDfiuRQrRSX9wt1fcYc9v-AKBdGQ
 	
 var channel = realtime.channels.get("ok");
 channel.subscribe(function(msg) {
-  alert("Received: " + JSON.stringify(msg.data));
+  console.log ("Received: " + JSON.stringify(msg.data));
 });	
 	
 	
-</script>
-
-	 
-	 
-
-	 
- 			  
+</script>	  
                   
 </body>
 </html>
