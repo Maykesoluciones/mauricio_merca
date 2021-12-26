@@ -17,25 +17,37 @@
 
 <script src="scripts/mqtt.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+
+  topic_raiz           = "ok"
+  topic_conexion       = "/conexion"	
 	
-{
-  var decoder = new encoding.TextDecoder();	
-  var options = {
-    keepalive: 30,
-    username: 'VRDsGQ.B_CYIQ', /* API key's name    VRDsGQ.B_CYIQ:dPUOfDfiuRQrRSX9wt1fcYc9v-AKBdGQa2jTP60_D5g      */
-    password: 'dPUOfDfiuRQrRSX9wt1fcYc9v-AKBdGQa2jTP60_D5g', /* API key's secret */
-    port: 8883
-  };
-  var client = mqtt.connect('mqtts:mqtt.ably.io', options);
-  client.on('message', function(topic, message) {
-    console.log(decoder.decode(message));
-  });
-  client.subscribe('ok', function (err) {
-    if (!err) {
-      client.publish('ok', 'Dios es lo mejor', { qos: 0 });
-    }
-  });
-}
+	
+const options = {
+  connectTimeout: 4000,
+  // Authentication
+  clientId:  " WEB FAM-MERCADO--->> " + Math.floor((Math.random() * 1000000) + 1),
+  username: 'VRDsGQ.B_CYIQ',
+  password: 'dPUOfDfiuRQrRSX9wt1fcYc9v-AKBdGQa2jTP60_D5g',
+  keepalive: 30,
+  clean: true,
+}	
+
+const WebSocket_URL = 'wss://mqtts:mqtt.ably.io:8883/mqtt'
+
+const client = mqtt.connect(WebSocket_URL, options)
+	
+	
+	
+	
+  client.on('connect', () => {
+    console.log('Conexion Exitosa')
+    //client.subscribe(topic_raiz + topic_variables)
+
+    client.publish(topic_raiz,mensaje_inicial, (error) => {
+      console.log(error || 'Publicacion Exitosa')
+    })
+
+  })
 	
 	
 </script>	
