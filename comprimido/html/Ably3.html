@@ -1,0 +1,45 @@
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+     <head>
+       <title>CONFIGURACION WIFI y MQTT</title>
+			   <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+         <style type='text/css'>
+			   </style>
+      </head>
+
+ <body>    
+	 
+</body>
+
+<script src="https://cdn.ably.io/lib/ably.min-1.js"></script>
+<script type="text/javascript">
+	
+{
+  const mqtt = require('mqtt');
+  const encoding = require('text-encoding');
+  var decoder = new encoding.TextDecoder();
+  var options = {
+    keepalive: 30,
+    username: 'xVLyHw.-0Rm1g', /* API key's name */
+    password: 'cwvnfETYpYdtVSBJEl3ajxM5cmUTmeEIMub9pQ3MQwA', /* API key's secret */
+    port: 8883
+  };
+  var client = mqtt.connect('mqtts:mqtt.ably.io', options);
+  client.on('message', function(topic, message) {
+    console.log(decoder.decode(message));
+  });
+  client.subscribe('my_channel', function (err) {
+    if (!err) {
+      client.publish('my_channel', 'my_message', { qos: 0 });
+    }
+  });
+}
+	
+	
+</script>	
+	
+</html>
