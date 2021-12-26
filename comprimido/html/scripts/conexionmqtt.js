@@ -1,5 +1,13 @@
   // connect options
 
+  // Authentication
+  // url = "https://realtime.ably.io/event-stream?";
+  // version = "1.2"
+  // username = "VRDsGQ.B_CYIQ";
+  // password = "dPUOfDfiuRQrRSX9wt1fcYc9v-AKBdGQa2jTP60_D5g";
+  // topic_raiz = "ok";
+  // topic_datos_lamparas = "/lamparas";
+
 
 
   // topic_raiz           = "g8g7zIGSSeyRQG1"
