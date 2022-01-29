@@ -44,11 +44,11 @@ eventSource.onmessage = function(event) {
   var topic_lamp =  message.channel;
 
 // Decodificar mensaje
-var decodedString = atob(message.data);
-console.log('Topic: ' + message.channel + '  Mensaje: ' + decodedString ); 
+var decodedString_LAMP = atob(message.data);
+console.log('Topic: ' + message.channel + '  Mensaje: ' + decodedString_LAMP ); 
 
 if (topic_lamp == topic_raiz + topic_datos_lamparas){
-  var splitted = decodedString.toString().split(",");
+  var splitted = decodedString_LAMP.toString().split(",");
   var switch1 = splitted[0];
   var inputChecked_L1;
 
