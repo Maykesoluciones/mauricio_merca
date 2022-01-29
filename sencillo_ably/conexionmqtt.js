@@ -31,7 +31,7 @@ if (topic == topic_raiz){
   document.getElementById("displayconexion").innerHTML = conexion;
 }
 
-var channel = ably.channels.get(topic_raiz);
+var channel = ably.channels.get(topic_datos_lamparas);
 channel.publish(clientId, 'Gracias Dios!');
 
 };
