@@ -1,0 +1,159 @@
+/*
+ Cronómetro
+
+ Imprime por pantalla el tiempo desde que se activa el sensor inductivo 1
+ hasta que se vuelve a sensar el inductivo 2 (estos conectados en paralelo). El boton RESET(No el de
+ la placa arduino, sino el conectado al pin 9) resetea el cronometro a 0.
+ El tiempo se imprime de la forma Minutos:Segundos:Milisegundos.
+ Cuando se activa o pulsa un sensor suena un pitido(opcinal).
+
+ PATILLAGE LCD:
+ LCD VSS     a gnd
+ LCD VDD     a 5v
+ LCD RS      al pin 7
+ LCD ENABLE  al pin 6
+ LCD D4      al pin 5
+ LCD D5      al pin 4
+ LCD D6      al pin 3
+ LCD D7      al pin 2
+
+ POTENCIOMETRO 1 10K (Contraste): conete una resitencia de 120 homios porque me funciono con el contraste de mi lcd luz azul
+ Conectado a 5v y a gnd. Conectado a LCD V0
+
+ SENSORES/PULSADORES:
+ Sensor START/STOP           al pin 8 (Se activa con señal LOW)
+ Pulsador RESET              al pin 9 (Se activa con señal LOW)
+ Pulsador iman               al pin 10(Se activa con señal LOW
+ salida de rele electroiman  al pin 11(Se activa con señal LOW
+
+
+ RETROILUMINACION:
+ POTENCIOMETRO 2 10K conectado a 5v y a gnd. Conectado a LCD BLA
+ LCD BLK conectado a gnd
+
+ */
+
+#include <LiquidCrystal.h>     //Incluimos la libreria que contiene las funciones del display LCD
+
+int m, mu = 0, md = 0;         //Declaramos las variables que vamos a usar
+int s, su = 0, sd = 0;
+int l, lu = 0, ld = 0, lc = 0;
+
+int conteo1 = 0;
+int sensor_inductivo, Reset, entrar, electroiman, puls_ele;
+long int tiempo, inicio;
+LiquidCrystal lcd(7, 6, 5, 4, 3, 2);    //Configuramos las Entradas/Salidas a las que esta conectado el LCD
+
+void setup() {
+
+  //declaracion de entradas y salidas digitales
+
+  pinMode(8, INPUT);        // entrada de sensores inductivos.
+  pinMode(9, INPUT);        // boton reset pantalla o contador
+  pinMode(10, INPUT);       // boton pulsador electroiman
+  pinMode(11, OUTPUT);      // salida a rele de electroiman
+
+
+  sensor_inductivo = LOW;   //Ponemos la variable antes a low
+  Reset = LOW;              //Ponemos la variable despues a low
+
+
+  lcd.begin(16, 2);
+  lcd.setCursor(0, 0);
+  lcd.print("ING. INDUSTRIAL");
+  delay(1000);
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("----PROGRAMA----");
+  delay(1000);
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("FISICA MECANICA");
+  delay(1000);
+
+  lcd.clear();
+  lcd.setCursor(3, 0);
+  lcd.print("CRONOMETRO");               //Escribimos 00:00:000 (Ponemos el cronometro a 0)
+  lcd.setCursor(4, 1);
+  lcd.print("00:00:000");
+  delay(300);
+
+}
+
+void loop() {
+
+  Reset = digitalRead(9);
+  if (Reset == HIGH) {              //Si el pin 9 esta LOW
+    delay(200);
+    lcd.clear();
+    lcd.setCursor(3, 0);
+    lcd.print("CRONOMETRO");               //Escribimos 00:00:000 (Ponemos el cronometro a 0)
+    lcd.setCursor(4, 1);
+    lcd.print("00:00:000");
+    delay(300);
+  }
+
+  //electroiman solo funciona no en ciclo de cconteo. solo al iniciar la prueba
+
+  puls_ele = digitalRead(10); // estado boton electroiman
+
+  if (puls_ele == HIGH) {
+    delay(200); //antirrebote
+    conteo1++;
+    if (conteo1 == 1) {
+      digitalWrite(11, HIGH);
+    }
+
+    if (conteo1 == 2) {
+      digitalWrite(11, LOW);
+      conteo1 = 0;
+    }
+  }
+
+
+
+  sensor_inductivo = digitalRead(8);    //Guardamos en la variable despues el valor del pin8 (sensores inductivos start/stop conexion paralelo)
+  if (sensor_inductivo == HIGH ) {        //Si el valor que tenia era HIGH y ahora tiene LOW sera porqueel sensor inductivo detecto el balin o el metal
+    delay(200);
+    digitalWrite(13, HIGH);
+    inicio = millis();                    //Guardamos en inicio el tiempo que se lleva ejecutando el programa hasta que
+    entrar = 0;                           //Ponemos la variable entrar a 0
+    delay(200);                           //Establecemos un retardo de 200ms
+
+    while (entrar == 0) {               //Cuando la variable pulsador sea 0
+      tiempo = millis() - inicio;        //Calculamos el tiempo que paso desde que se activo el sensor start/stop
+
+      m = (tiempo / 1000) / 60;           //Calculamos los minutos
+      mu = m % 10;                        //Descomponemos los minutos y sacamos el valor de las unidades
+      md = (m - mu) / 10;                 //Descomponemos los minutos y sacamos el valor de las decenas
+
+      s = (tiempo / 1000) % 60;           //Calculamos los segundos
+      su = s % 10;                        //Descomponemos los segundos y sacamos el valor de las unidades
+      sd = (s - su) / 10;                 //Descomponemos los segundos y sacamos el valor de las decenas
+
+      l = (tiempo % 1000);                //Calculamos las milesimas de segundo
+      lu = l % 10;                        //Descomponemos las milesimas y sacamos el valor de las unidades
+      ld = ((l - lu) / 10) % 10;          //Descomponemos las milesimas y sacamos el valor de las decenas
+      lc = (l - (ld * 10) - lu) / 100;    //Descomponemos las milesimas y sacamos el valor de las centenas
+
+      lcd.setCursor(4, 1);                //Ponemos el cursor en la linea 2 y el caracter 5
+      lcd.print(md);                      //Imprimimos los valores en el display
+      lcd.print(mu);
+      lcd.print(":");
+      lcd.print(sd);
+      lcd.print(su);
+      lcd.print(":");
+      lcd.print(lc);
+      lcd.print(ld);
+      lcd.print(lu);
+
+      sensor_inductivo = digitalRead(8);  //Guardamos en la variable nuevamnete en sensor_inductivo y la monitoreamos (sensor start/stop)
+      if (sensor_inductivo == HIGH) {      //Si el valor que tenia era HIGH y ahora tiene LOW sera porque hemos activado
+       delay(100);
+        entrar = 1;                       //Ponemos la variable entrar a 1 para salir del condiconal if de millis y pausar conteo
+      }
+    }
+  }
+}
